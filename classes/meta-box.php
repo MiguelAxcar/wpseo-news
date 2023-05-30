@@ -55,11 +55,9 @@ class WPSEO_News_Meta_Box extends WPSEO_Metabox {
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		}
 
-		// Load the editor script when on an elementor edit page.
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- This deprecation will be addressed later.
-		$get_action             = filter_input( INPUT_GET, 'action', @FILTER_SANITIZE_STRING );
-		$is_elementor_edit_page = $pagenow === 'post.php' && $get_action === 'elementor';
-		if ( $is_elementor_edit_page ) {
+		// Load the editor script when on an Elementor edit page.
+		$get_action = isset( $_GET['action'] ) ? htmlspecialchars( $_GET['action'], ENT_QUOTES, 'UTF-8' ) : '';
+		if ( $get_action === 'elementor' && $pagenow === 'post.php' ) {
 			add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		}
 
